@@ -53,6 +53,7 @@ def _julia_number_of_term(x: float, y: float, cx: float, cy: float) -> int:
 def _mandelbrot_number_of_term(x: float, y: float) -> int:
     return _julia_number_of_term(0, 0, x, y)
 
+# TODO: add color array
 def calc(mx: float, my: float, dmx: float, dmy: float,
         cx: float, cy: float,
         jx: float, jy: float, djx: float, djy: float) -> tuple:
