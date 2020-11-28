@@ -4,6 +4,8 @@ import pygame
 
 import calc_simple as calc
 
+import time
+
 def main() -> int:
     pygame.init()
 
@@ -13,7 +15,11 @@ def main() -> int:
     clock = pygame.time.Clock()
     finished = False
 
+    zero = time.time()
+
     points = calc.calc(0, 0, 3, 3, -0.1225611669, -0.7448617670, 0, 0, 3, 3)
+
+    first = time.time()
     surface_m = pygame.Surface((calc.WIDTH, calc.HEIGHT))
     pixelArray_m = pygame.PixelArray(surface_m)
     for x in range(calc.WIDTH):
@@ -30,6 +36,8 @@ def main() -> int:
     newSurf_j = pixelArray_j.make_surface()
     screen.blit(newSurf_j, (calc.WIDTH, 0))
 
+    second = time.time()
+
     pygame.display.update()
 
     while (not finished):
@@ -39,6 +47,9 @@ def main() -> int:
                 finished = True
 
     pygame.quit()
+
+    print("Calc:", first - zero)
+    print("Render:", second - first)
     return 0
 
 if (__name__ == "__main__"):
