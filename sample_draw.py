@@ -20,20 +20,10 @@ def main() -> int:
     points = calc.calc(0, 0, 3, 3, -0.1225611669, -0.7448617670, 0, 0, 3, 3)
 
     first = time.time()
-    surface_m = pygame.Surface((calc.WIDTH, calc.HEIGHT))
-    pixelArray_m = pygame.PixelArray(surface_m)
-    for x in range(calc.WIDTH):
-        for y in range(calc.HEIGHT):
-            pixelArray_m[x, y] = points[0][x][y]
-    newSurf_m = pixelArray_m.make_surface()
+    newSurf_m = pygame.surfarray.make_surface(points[0])
     screen.blit(newSurf_m, (0, 0))
 
-    surface_j = pygame.Surface((calc.WIDTH, calc.HEIGHT))
-    pixelArray_j = pygame.PixelArray(surface_j)
-    for x in range(calc.WIDTH):
-        for y in range(calc.HEIGHT):
-            pixelArray_j[x, y] = points[1][x][y]
-    newSurf_j = pixelArray_j.make_surface()
+    newSurf_j = pygame.surfarray.make_surface(points[1])
     screen.blit(newSurf_j, (calc.WIDTH, 0))
 
     second = time.time()

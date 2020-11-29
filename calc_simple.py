@@ -1,5 +1,8 @@
 #!/usr/bin/python3
 
+import numpy as np
+# TODO rewrite with np.arrays
+
 NUM_STEPS = 1024;
 
 WIDTH = 400
@@ -86,7 +89,7 @@ def calc(mx: float, my: float, dmx: float, dmy: float,
         for j in range(HEIGHT):
             j_points[i][j] = _get_color(_julia_number_of_term(
                 jx - djx / 2 + djx * i / HEIGHT, jy - djy / 2 + djy * j / HEIGHT, cx, cy), COLORS)
-    return (m_points, j_points)
+    return (np.array(m_points), np.array(j_points))
 
 if (__name__ == "__main__"):
     print("TODO: write test script")
