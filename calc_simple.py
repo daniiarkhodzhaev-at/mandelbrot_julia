@@ -1,12 +1,11 @@
 #!/usr/bin/python3
 
 import numpy as np
-# TODO rewrite with np.arrays
 
 NUM_STEPS = 1024;
 
-WIDTH = 400
-HEIGHT = 400
+WIDTH = 800
+HEIGHT = 800
 
 def __scale(color: tuple, a: float) -> tuple:
     assert len(color) == 3
@@ -44,18 +43,6 @@ def _get_color(n: int, colors: tuple) -> tuple:
 
     return (0.0, 0.0, 0.0)
 
-def _julia_number_of_term(x: float, y: float, cx: float, cy: float) -> int:
-    x0, y0 = x, y
-    i = 0
-    while (x0 * x0 + y0 * y0 <= 4 and i < NUM_STEPS):
-        x0, y0 = x0 * x0 - y0 * y0 + cx, 2 * x0 * y0 + cy
-        i += 1
-
-    return i
-
-def _mandelbrot_number_of_term(x: float, y: float) -> int:
-    return _julia_number_of_term(0, 0, x, y)
-
 # TODO: add color array
 def calc(mx: float, my: float, dmx: float, dmy: float,
         cx: float, cy: float,
@@ -79,17 +66,43 @@ def calc(mx: float, my: float, dmx: float, dmy: float,
 
     @return typle --- 2d list of pixel colors (color --- rgb tuple)
     """
-    m_points = [[(0, 0, 0) for _ in range(HEIGHT)] for _ in range(WIDTH)]
-    for i in range(WIDTH):
-        for j in range(HEIGHT):
-            m_points[i][j] = _get_color(_mandelbrot_number_of_term(
-                mx - dmx / 2 + dmx * i / HEIGHT, my - dmy / 2 + dmy * j / HEIGHT), COLORS)
-    j_points = [[(0, 0, 0) for _ in range(HEIGHT)] for _ in range(WIDTH)]
-    for i in range(WIDTH):
-        for j in range(HEIGHT):
-            j_points[i][j] = _get_color(_julia_number_of_term(
-                jx - djx / 2 + djx * i / HEIGHT, jy - djy / 2 + djy * j / HEIGHT, cx, cy), COLORS)
-    return (np.array(m_points), np.array(j_points))
+    m_points_r = np.full((WIDTH, HEIGHT), 0.0)
+    m_points_g = np.full((WIDTH, HEIGHT), 0.0)
+    m_points_b = np.full((WIDTH, HEIGHT), 0.0)
+    m_filled = np.full((WIDTH, HEIGHT), 0)
+    m_x0 = np.full((WIDTH, HEIGHT), 0.0)
+    m_y0 = np.full((WIDTH, HEIGHT), 0.0)
+    mcx, mcy = np.meshgrid(np.linspace(mx - dmx / 2, mx + dmx / 2, WIDTH), np.linspace(my - dmy / 2, my + dmy / 2, HEIGHT), indexing="ij")
+    for it in range(NUM_STEPS+1):
+        m_x0, m_y0 = m_x0 ** 2 - m_y0 ** 2 + mcx, 2 * m_x0 * m_y0 + mcy
+        m_div = m_x0 ** 2 + m_y0 ** 2 > 4.0
+        m_div = m_div.astype(np.int)
+        m_div -= m_div * m_filled
+        m_color = _get_color(it, COLORS)
+        m_points_r += m_div * m_color[0]
+        m_points_g += m_div * m_color[1]
+        m_points_b += m_div * m_color[2]
+        m_filled += m_div
+    m_points = np.dstack((m_points_r, m_points_g, m_points_b))
+
+    j_points_r = np.full((WIDTH, HEIGHT), 0.0)
+    j_points_g = np.full((WIDTH, HEIGHT), 0.0)
+    j_points_b = np.full((WIDTH, HEIGHT), 0.0)
+    j_filled = np.full((WIDTH, HEIGHT), 0)
+    j_x0, j_y0 = np.meshgrid(np.linspace(jx - djx / 2, jx + djx / 2, WIDTH), np.linspace(jy - djy / 2, jy + djy / 2, HEIGHT), indexing="ij")
+    for it in range(NUM_STEPS+1):
+        j_x0, j_y0 = j_x0 ** 2 - j_y0 ** 2 + cx, 2 * j_x0 * j_y0 + cy
+        j_div = j_x0 ** 2 + j_y0 ** 2 > 4.0
+        j_div = j_div.astype(np.int)
+        j_div -= j_div * j_filled
+        j_color = _get_color(it, COLORS)
+        j_points_r += j_div * j_color[0]
+        j_points_g += j_div * j_color[1]
+        j_points_b += j_div * j_color[2]
+        j_filled += j_div
+    j_points = np.dstack((j_points_r, j_points_g, j_points_b))
+
+    return (m_points, j_points)
 
 if (__name__ == "__main__"):
     print("TODO: write test script")
