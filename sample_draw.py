@@ -2,7 +2,7 @@
 
 import pygame
 
-import calc_simple as calc
+import calc_numpy as calc
 
 import time
 
