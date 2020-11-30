@@ -3,11 +3,14 @@
 import numpy as np
 # TODO rewrite with np.arrays
 
+from numba import njit
+
 NUM_STEPS = 1024;
 
-WIDTH = 400
-HEIGHT = 400
+WIDTH = 800
+HEIGHT = 800
 
+@njit
 def __scale(color: tuple, a: float) -> tuple:
     assert len(color) == 3
     return (color[0] * a, color[1] * a, color[2] * a)
@@ -17,11 +20,13 @@ COLORS = (__scale((0.61, 0.15, 0.69), 255),
           __scale((0.25, 0.32, 0.71), 255),
           __scale((0.00, 0.66, 0.96), 255))
 
+@njit
 def __color_sum(color1: tuple, color2: tuple) -> tuple:
     assert len(color1) == 3
     assert len(color2) == 3
     return (color1[0] + color2[0], color1[1] + color2[1], color1[2] + color2[2])
 
+@njit
 def _get_color(n: int, colors: tuple) -> tuple:
     if (n == NUM_STEPS):
         return (0.0 ,0.0 ,0.0)
@@ -44,6 +49,7 @@ def _get_color(n: int, colors: tuple) -> tuple:
 
     return (0.0, 0.0, 0.0)
 
+@njit
 def _julia_number_of_term(x: float, y: float, cx: float, cy: float) -> int:
     x0, y0 = x, y
     i = 0
@@ -53,10 +59,12 @@ def _julia_number_of_term(x: float, y: float, cx: float, cy: float) -> int:
 
     return i
 
+@njit
 def _mandelbrot_number_of_term(x: float, y: float) -> int:
     return _julia_number_of_term(0, 0, x, y)
 
 # TODO: add color array
+@njit(parallel=True)
 def calc(mx: float, my: float, dmx: float, dmy: float,
         cx: float, cy: float,
         jx: float, jy: float, djx: float, djy: float) -> tuple:
@@ -79,16 +87,11 @@ def calc(mx: float, my: float, dmx: float, dmy: float,
 
     @return typle --- 2d list of pixel colors (color --- rgb tuple)
     """
-    m_points = [[(0, 0, 0) for _ in range(HEIGHT)] for _ in range(WIDTH)]
-    for i in range(WIDTH):
-        for j in range(HEIGHT):
-            m_points[i][j] = _get_color(_mandelbrot_number_of_term(
-                mx - dmx / 2 + dmx * i / HEIGHT, my - dmy / 2 + dmy * j / HEIGHT), COLORS)
-    j_points = [[(0, 0, 0) for _ in range(HEIGHT)] for _ in range(WIDTH)]
-    for i in range(WIDTH):
-        for j in range(HEIGHT):
-            j_points[i][j] = _get_color(_julia_number_of_term(
-                jx - djx / 2 + djx * i / HEIGHT, jy - djy / 2 + djy * j / HEIGHT, cx, cy), COLORS)
+    m_points = [[_get_color(_mandelbrot_number_of_term(
+                mx - dmx / 2 + dmx * i / WIDTH, my - dmy / 2 + dmy * j / HEIGHT), COLORS) for j in range(HEIGHT)] for i in range(WIDTH)]
+    j_points = [[_get_color(_julia_number_of_term(
+                jx - djx / 2 + djx * i / WIDTH, jy - djy / 2 + djy * j / HEIGHT, cx, cy), COLORS) for j in range(HEIGHT)] for i in range(WIDTH)]
+
     return (np.array(m_points), np.array(j_points))
 
 if (__name__ == "__main__"):
