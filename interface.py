@@ -6,7 +6,7 @@ pygame.init()
 calc.init()
 WIDTH = 700
 HEIGHT = 700
-pygame.display.set_caption('Множество Жулиа')
+pygame.display.set_caption('Множество Жюлиа')
 window_surface = pygame.display.set_mode((2*WIDTH, HEIGHT))
 
 background = pygame.Surface((2*WIDTH, HEIGHT))
@@ -116,28 +116,29 @@ jx = 0
 jy = 0
 djx = 3
 djy = 3
+flag = 0
+flag1 = 0
+create_fractal(mx, my, dmx, dmy, jx, jy, djx, djy)
+x0, y0, x1, y1 = 0, 0, 0, 0
 while is_running:
     time_delta = clock.tick(60)/1000.0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             is_running = False
-        if event.type == pygame.MOUSEBUTTONUP and (mx != event.pos[0] or my != event.pos[1]):
-            x, y = event.pos
-            if x >= 30 and y >= 150 and x <= 650 and y <= 650:
-                mx, my = event.pos
-                mx -= 30
-                my -= 150
-                mx = 500 - mx
-                my = 500 - my
-                mx = mx / 500
-                my = my / 500
-       # print(mx, my)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            x0, y0 = event.pos
+            print("мышку нажали")
+        if event.type == pygame.MOUSEBUTTONUP:
+            x1, y1 = event.pos
+            print("мышку отпустили")
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button1:
                     dmx, dmy = increase(dmx, dmy)
+                    flag = 1
                 if event.ui_element == button2:
                     dmx, dmy = red(dmx, dmy)
+                    flag = 1
                 if event.ui_element == button3:
                     enlarge_area()
                 if event.ui_element == button4:
@@ -146,9 +147,10 @@ while is_running:
                     julia()
                 if event.ui_element == button6:
                     dmx, dmy, mx, my = 3, 3, 0, 0
-
+                    flag = 1
                 if event.ui_element == button7:
                     djx, djy = increase(djx, djy)
+                    flag = 1
                 if event.ui_element == button8:
                     djx, djy = red(djx, djy)
                 if event.ui_element == button9:
@@ -163,7 +165,16 @@ while is_running:
     manager.update(time_delta)
     #mx = 0
     #my = 0
-    create_fractal(mx, my, dmx, dmy, jx, jy, djx, djy)
+    if((x0 != x1 or y0 != y1) and x1 >= 30 and x1 <= 530 and y1 >= 150 and y1 <= 650 and x0 >= 30 and x0 <= 530 and y0 >= 150 and y0 <= 650):
+        print("COOR", x0, y0)
+        flag1 = 1
+    if(flag == 1 or flag1 == 1):
+        mx -= (x1 - x0)/width*dmx
+        my -= (y1 - y0)/height*dmy
+        create_fractal(mx, my, dmx, dmy, jx, jy, djx, djy)
+        x0, y0, x1, y1 = 0, 0, 0, 0
+        flag = 0
+        flag1 = 0
     window_surface.blit(background, (0, 0))
     manager.draw_ui(window_surface)
 
