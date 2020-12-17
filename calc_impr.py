@@ -6,7 +6,7 @@ import ctypes
 
 def init() -> None:
     global ccalc, buff
-    ccalc = ctypes.cdll.LoadLibrary("calc.so")
+    ccalc = ctypes.cdll.LoadLibrary("./calc.so")
     ccalc._calc_man.restype = ctypes.c_void_p;
     ccalc._calc_man.argtypes = [ctypes.c_int, ctypes.c_int,\
             ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
