@@ -74,7 +74,6 @@ s1_coor = (30, 150)
 s2_coor = (700, 150)
 dr.rect(background, (255, 0, 0), (s1_coor[0], s1_coor[1], width, width), 8)
 dr.rect(background, (255, 0, 0), (s2_coor[0], s2_coor[1], width, width), 8)
-#TODO: сделать функции отрисовки отдельно, занести всё в константы, сделать "точку жулиа"
 def create_man(mx1, my1, dmx1, dmx2):
     mx = mx1
     my = my1
