@@ -6,6 +6,21 @@ pygame.init()
 calc.init()
 WIDTH = 1230
 HEIGHT = 700
+c1, c2, c3 = (128,0,0), (0,128,0), (0,0,128)
+c4, c5, c6 = (220,20,60), (0,100,0), (75,0,130)
+c7, c8, c9 = (139,0,139), (30,144,255), (255,140,0)
+c10, c11, c12  = (255, 255, 0), (255, 165, 0), (64, 224, 208)
+p1 = (c1, c2, c3)
+p2 = (c4, c5, c6)
+p3 = (c7, c8, c9)
+p4 = (c1, c4, c7)
+p5 = (c2, c5, c8)
+p6 = (c3, c6, c9)
+p7 = (c1, c5, c9)
+p8 = (c7, c5, c3)
+p9 = (c10, c11, c12)
+p10 = (c2, c9, c10)
+p = (p1, p2, p3, p4, p5, p6, p7, p8, p9, p10)
 pygame.display.set_caption('Множество Жюлиа')
 window_surface = pygame.display.set_mode((WIDTH, HEIGHT))
 
@@ -117,15 +132,18 @@ flag = 0
 flag1 = 0
 flag2 = 0
 flag3 = 0
+flag4 = 0
 create_man(mx, my, dmx, dmy)
 create_jul(cx, cy, jx, jy, djx, djy)
 x0, y0, x1, y1 = 0, 0, 0, 0
 t = 0
+i = 0
 while is_running:
     flag = 0
     flag1 = 0
     flag2 = 0
     flag3 = 0
+    flag4 = 0
     time_delta = clock.tick(60)/1000.0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -163,6 +181,11 @@ while is_running:
                     jx, jy, djx, djy = 0, 0, 3, 3 
                     cx = -0.1225611669
                     cy =  -0.7448617670 
+                if event.ui_element == button_p:
+                    i += 1
+                    i %= 10
+                    calc.set_colors(*p[i])
+                    flag4 = 1
         manager.process_events(event)
 
     manager.update(time_delta)
@@ -180,7 +203,7 @@ while is_running:
             flag3 = 1
             cx = mx + ((x0 - s1_coor[0])/width - 0.5)*dmx
             cy = my + ((y0 - s1_coor[1])/width - 0.5)*dmy
-    if(flag == 1 or flag1 == 1 or flag2 == 1 or flag3 == 1):
+    if(flag == 1 or flag1 == 1 or flag2 == 1 or flag3 == 1 or flag4 == 1):
         if(flag1 == 1 and t != 1):
             mx -= (x1 - x0)/width*dmx
             my -= (y1 - y0)/height*dmy
