@@ -13,6 +13,10 @@ def main() -> int:
     pygame.init()
     calc.init()
 
+    calc.set_colors((156,  38, 177),
+                    ( 64,  82, 182),
+                    (  0, 169, 246))
+
     FPS = 30
     screen = pygame.display.set_mode((2*WIDTH, HEIGHT))
 

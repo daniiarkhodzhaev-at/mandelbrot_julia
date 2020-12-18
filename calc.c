@@ -4,9 +4,25 @@
 
 const int NUM_STEPS = 1024;
 
-const int col1[] = {156,  38, 177};
-const int col2[] = { 64,  82, 182};
-const int col3[] = {  0, 169, 246};
+static int col1[] = {156,  38, 177};
+static int col2[] = { 64,  82, 182};
+static int col3[] = {  0, 169, 246};
+
+int _set_color(int r1, int g1, int b1,
+              int r2, int g2, int b2,
+              int r3, int g3, int b3) {
+    col1[0] = r1;
+    col1[1] = g1;
+    col1[2] = b1;
+    col2[0] = r2;
+    col2[1] = g2;
+    col2[2] = b2;
+    col3[0] = r3;
+    col3[1] = g3;
+    col3[2] = b3;
+
+    return 0;
+}
 
 static void *__vec3(int r, int g, int b) {
     int *ans = malloc(sizeof(int) * 3);
