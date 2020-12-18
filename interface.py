@@ -57,6 +57,9 @@ button8 = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((x1 + dx1, y1),
 button12 = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((x1 + 2*dx1, y1), (50, 50)),
                                              text='home',
                                              manager=manager)
+button_p = pygame_gui.elements.UIButton(relative_rect=pygame.Rect((585, y1), (70, 50)),
+                                             text='colors',
+                                             manager=manager)
 text_coor1 = (80, 20)
 text_coor2 = (790, 20)
 f = pygame.font.SysFont('arial', 30)
