@@ -113,6 +113,7 @@ djy = 3
 flag = 0
 flag1 = 0
 flag2 = 0
+flag3 = 0
 create_man(mx, my, dmx, dmy)
 create_jul(cx, cy, jx, jy, djx, djy)
 x0, y0, x1, y1 = 0, 0, 0, 0
@@ -121,6 +122,7 @@ while is_running:
     flag = 0
     flag1 = 0
     flag2 = 0
+    flag3 = 0
     time_delta = clock.tick(60)/1000.0
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -172,9 +174,10 @@ while is_running:
     if((x0 >= s1_coor[0] and x0 <= s1_coor[0] + width and y0 >= s1_coor[1] and y0 <= s1_coor[1] + width)):
         if(t == 1):
             print("координата подходит")
+            flag3 = 1
             cx = mx + ((x0 - s1_coor[0])/width - 0.5)*dmx
             cy = my + ((y0 - s1_coor[1])/width - 0.5)*dmy
-    if(flag == 1 or flag1 == 1 or flag2 == 1):
+    if(flag == 1 or flag1 == 1 or flag2 == 1 or flag3 == 1):
         if(flag1 == 1 and t != 1):
             mx -= (x1 - x0)/width*dmx
             my -= (y1 - y0)/height*dmy
