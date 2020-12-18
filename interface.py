@@ -116,6 +116,7 @@ flag2 = 0
 create_man(mx, my, dmx, dmy)
 create_jul(cx, cy, jx, jy, djx, djy)
 x0, y0, x1, y1 = 0, 0, 0, 0
+t = 0
 while is_running:
     flag = 0
     flag1 = 0
@@ -129,7 +130,7 @@ while is_running:
             print("мышку нажали", x0, y0)
         if event.type == pygame.MOUSEBUTTONUP:
             x1, y1 = event.pos
-            print("мышку отпустили")
+            #print("мышку отпустили")
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button1:
@@ -139,8 +140,10 @@ while is_running:
                     dmx, dmy = red(dmx, dmy)
                     flag = 1
                 if event.ui_element == button4:
+                    t = 1
                     julia()
                 if event.ui_element == button5:
+                    t = 0
                     move()
                 if event.ui_element == button6:
                     dmx, dmy, mx, my = 3, 3, 0, 0
@@ -152,7 +155,9 @@ while is_running:
                     djx, djy = red(djx, djy)
                     flag = 1 
                 if event.ui_element == button12:
-                    jx, jy, djx, djy = 0, 0, 3, 3
+                    jx, jy, djx, djy = 0, 0, 3, 3 
+                    cx = -0.1225611669
+                    cy =  -0.7448617670 
         manager.process_events(event)
 
     manager.update(time_delta)
@@ -164,8 +169,13 @@ while is_running:
     if((x0 != x1 or y0 != y1) and x1 >= s2_coor[0] and x1 <= s2_coor[0] + width and y1 >= s2_coor[1] and y1 <= s2_coor[1] + height and x0 >= s2_coor[0] and x0 <= s2_coor[0]+width and y0 >= s2_coor[1]  and y0 <= s2_coor[1] + height):
         #print("COOR222", x0, y0)
         flag2 = 1
+    if((x0 >= s1_coor[0] and x0 <= s1_coor[0] + width and y0 >= s1_coor[1] and y0 <= s1_coor[1] + width)):
+        if(t == 1):
+            print("координата подходит")
+            cx = mx + ((x0 - s1_coor[0])/width - 0.5)*dmx
+            cy = my + ((y0 - s1_coor[1])/width - 0.5)*dmy
     if(flag == 1 or flag1 == 1 or flag2 == 1):
-        if(flag1 == 1):
+        if(flag1 == 1 and t != 1):
             mx -= (x1 - x0)/width*dmx
             my -= (y1 - y0)/height*dmy
         if(flag2 == 1):
