@@ -6,15 +6,20 @@ import ctypes
 
 def init() -> None:
     global ccalc, buff
-    ccalc = ctypes.cdll.LoadLibrary("calc.so")
+    ccalc = ctypes.cdll.LoadLibrary("./calc.so")
     ccalc._calc_man.restype = ctypes.c_void_p;
     ccalc._calc_man.argtypes = [ctypes.c_int, ctypes.c_int,\
             ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
 
-    ccalc._calc_jul.restype = ctypes.c_void_p;
+    ccalc._calc_jul.restype = ctypes.c_void_p
     ccalc._calc_jul.argtypes = [ctypes.c_int, ctypes.c_int,\
             ctypes.c_double, ctypes.c_double,\
             ctypes.c_double, ctypes.c_double, ctypes.c_double, ctypes.c_double]
+
+    ccalc._set_color.restype = ctypes.c_int
+    ccalc._set_color.argtypes = [ctypes.c_int, ctypes.c_int, ctypes.c_int,
+                                 ctypes.c_int, ctypes.c_int, ctypes.c_int,
+                                 ctypes.c_int, ctypes.c_int, ctypes.c_int]
 
     buff = []
 
@@ -73,7 +78,6 @@ def calc_jul(width: int, height: int,
     return j_points
 
 
-# TODO: add color array
 def calc(width: int, height: int,
         mx: float, my: float, dmx: float, dmy: float,
         cx: float, cy: float,
@@ -103,6 +107,13 @@ def calc(width: int, height: int,
 
     return (calc_man(width, height, mx, my, dmx, dmy),
             calc_jul(width, height, cx, cy, jx, jy, djx, djy))
+
+
+def set_colors(color1: tuple, color2: tuple, color3: tuple) -> int:
+    if (len(color1) != 3 or len(color2) != 3 or len(color3) != 3):
+        raise ValueError("Incorrect color format (expected 3 tuples of length 3)")
+    query = color1 + color2 + color3
+    return ccalc._set_color(*query)
 
 
 def free() -> None:
