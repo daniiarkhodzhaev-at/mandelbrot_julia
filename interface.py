@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import pygame
 import pygame_gui
 import pygame.draw as dr
@@ -29,16 +30,11 @@ background.fill(pygame.Color('#000000'))
 
 
 def increase(dmx, dmy):
-    print("эта функция что-то делает")
     return (dmx/1.2, dmy/1.2)
 def move():
-    print("эта функция что-то")
     pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
 def julia():
-    print("эта функция что-то")
     pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_CROSSHAIR)
-def enlarge_area():
-    print("эта функция что-то")
 def red(dmx, dmy):
     return(dmx*1.2, dmy*1.2)
 x = 95
@@ -150,10 +146,8 @@ while is_running:
             is_running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
             x0, y0 = event.pos
-            print("мышку нажали", x0, y0)
         if event.type == pygame.MOUSEBUTTONUP:
             x1, y1 = event.pos
-            #print("мышку отпустили")
         if event.type == pygame.USEREVENT:
             if event.user_type == pygame_gui.UI_BUTTON_PRESSED:
                 if event.ui_element == button1:
@@ -192,14 +186,11 @@ while is_running:
     #mx = 0
     #my = 0
     if((x0 != x1 or y0 != y1) and x1 >= s1_coor[0] and x1 <= s1_coor[0] + width and y1 >= s1_coor[1] and y1 <= s1_coor[1] + height and x0 >= s1_coor[0] and x0 <= s1_coor[0]+width and y0 >= s1_coor[1]  and y0 <= s1_coor[1] + height):
-        print("COOR", x0, y0)
         flag1 = 1
     if((x0 != x1 or y0 != y1) and x1 >= s2_coor[0] and x1 <= s2_coor[0] + width and y1 >= s2_coor[1] and y1 <= s2_coor[1] + height and x0 >= s2_coor[0] and x0 <= s2_coor[0]+width and y0 >= s2_coor[1]  and y0 <= s2_coor[1] + height):
-        #print("COOR222", x0, y0)
         flag2 = 1
     if((x0 >= s1_coor[0] and x0 <= s1_coor[0] + width and y0 >= s1_coor[1] and y0 <= s1_coor[1] + width)):
         if(t == 1):
-            print("координата подходит")
             flag3 = 1
             cx = mx + ((x0 - s1_coor[0])/width - 0.5)*dmx
             cy = my + ((y0 - s1_coor[1])/width - 0.5)*dmy
@@ -208,7 +199,6 @@ while is_running:
             mx -= (x1 - x0)/width*dmx
             my -= (y1 - y0)/height*dmy
         if(flag2 == 1):
-            #print('второй if сработал')
             jx -= (x1 - x0)/width*djx
             jy -= (y1 - y0)/height*djy
         create_man(mx, my, dmx, dmy)
