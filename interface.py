@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin/python3
+
 import pygame
 import pygame_gui
 import pygame.draw as dr
@@ -28,13 +29,17 @@ window_surface = pygame.display.set_mode((WIDTH, HEIGHT))
 background = pygame.Surface((WIDTH, HEIGHT))
 background.fill(pygame.Color('#000000'))
 
+CURSOR_CHANGE_FEATURE = "mouse" in pygame.__dict__ and\
+        "set_system_cursor" in pygame.mouse.__dict__
 
 def increase(dmx, dmy):
     return (dmx/1.2, dmy/1.2)
 def move():
-    pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
+    if (CURSOR_CHANGE_FEATURE):
+        pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_ARROW)
 def julia():
-    pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_CROSSHAIR)
+    if (CURSOR_CHANGE_FEATURE):
+        pygame.mouse.set_system_cursor(pygame.SYSTEM_CURSOR_CROSSHAIR)
 def red(dmx, dmy):
     return(dmx*1.2, dmy*1.2)
 x = 95
@@ -175,6 +180,7 @@ while is_running:
                     jx, jy, djx, djy = 0, 0, 3, 3 
                     cx = -0.1225611669
                     cy =  -0.7448617670 
+                    flag = 1
                 if event.ui_element == button_p:
                     i += 1
                     i %= 10
@@ -185,20 +191,25 @@ while is_running:
     manager.update(time_delta)
     #mx = 0
     #my = 0
-    if((x0 != x1 or y0 != y1) and x1 >= s1_coor[0] and x1 <= s1_coor[0] + width and y1 >= s1_coor[1] and y1 <= s1_coor[1] + height and x0 >= s1_coor[0] and x0 <= s1_coor[0]+width and y0 >= s1_coor[1]  and y0 <= s1_coor[1] + height):
+    if ((x0 != x1 or y0 != y1) and x1 >= s1_coor[0] and x1 <= s1_coor[0] + width and
+            y1 >= s1_coor[1] and y1 <= s1_coor[1] + height and x0 >= s1_coor[0] and
+            x0 <= s1_coor[0]+width and y0 >= s1_coor[1]  and y0 <= s1_coor[1] + height):
         flag1 = 1
-    if((x0 != x1 or y0 != y1) and x1 >= s2_coor[0] and x1 <= s2_coor[0] + width and y1 >= s2_coor[1] and y1 <= s2_coor[1] + height and x0 >= s2_coor[0] and x0 <= s2_coor[0]+width and y0 >= s2_coor[1]  and y0 <= s2_coor[1] + height):
+    if ((x0 != x1 or y0 != y1) and x1 >= s2_coor[0] and x1 <= s2_coor[0] + width and
+            y1 >= s2_coor[1] and y1 <= s2_coor[1] + height and x0 >= s2_coor[0] and
+            x0 <= s2_coor[0]+width and y0 >= s2_coor[1]  and y0 <= s2_coor[1] + height):
         flag2 = 1
-    if((x0 >= s1_coor[0] and x0 <= s1_coor[0] + width and y0 >= s1_coor[1] and y0 <= s1_coor[1] + width)):
+    if (x0 >= s1_coor[0] and x0 <= s1_coor[0] + width and y0 >= s1_coor[1] and
+            y0 <= s1_coor[1] + width):
         if(t == 1):
             flag3 = 1
             cx = mx + ((x0 - s1_coor[0])/width - 0.5)*dmx
             cy = my + ((y0 - s1_coor[1])/width - 0.5)*dmy
-    if(flag == 1 or flag1 == 1 or flag2 == 1 or flag3 == 1 or flag4 == 1):
-        if(flag1 == 1 and t != 1):
+    if (flag == 1 or flag1 == 1 or flag2 == 1 or flag3 == 1 or flag4 == 1):
+        if (flag1 == 1 and t != 1):
             mx -= (x1 - x0)/width*dmx
             my -= (y1 - y0)/height*dmy
-        if(flag2 == 1):
+        if (flag2 == 1):
             jx -= (x1 - x0)/width*djx
             jy -= (y1 - y0)/height*djy
         create_man(mx, my, dmx, dmy)
